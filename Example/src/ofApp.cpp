@@ -3,8 +3,6 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
     
-    // make sure to copy the shaders folder from addons/ofxShadowsSimple/shaders to the bin folder //
-    
     ofSetBoxResolution( 30, 30, 30 );
     
     cam.disableMouseInput();
@@ -12,11 +10,12 @@ void ofApp::setup() {
     cam.setPosition(0, 0, -10 );
     cam.lookAt( ofVec3f(0,0,0), ofVec3f(0,-1,0) );
     cam.setNearClip(1);
-    cam.setFarClip(250);
+    cam.setFarClip(150);
     
     cam.enableMouseInput();
     
-    shadow.setRange( 10, 250 );
+    // range of the shadow camera //
+    shadow.setRange( 10, 150 );
     shadow.setBias( 0.01 );
     
     bunny.load( "lofi-bunny.ply" );

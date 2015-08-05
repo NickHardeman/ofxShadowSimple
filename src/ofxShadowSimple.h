@@ -31,7 +31,9 @@ public:
     float getWidth();
     float getHeight();
     
+    // bias to reduce shadow acne //
     void setBias( float aBias );
+    // intensity of the shadows //
     void setIntensity( float aIntensity );
     
 protected:
