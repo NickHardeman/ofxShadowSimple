@@ -67,12 +67,16 @@ void ofApp::renderScene() {
     ofBackground( 241,212,55 );
     
     ofSetColor( 241,238,162 );
-    ofDrawBox( 2, 2, 2 );
+    ofPushMatrix(); {
+        ofRotateX( cos( ofGetElapsedTimef() * 2.3) * sin( ofGetElapsedTimef() ) * RAD_TO_DEG );
+        ofRotateY( sin( ofGetElapsedTimef() ) * RAD_TO_DEG );
+        ofDrawBox( 2, 2, 2 );
+    } ofPopMatrix();
     
     ofSetColor( 241,221,113 );
     ofDrawSphere( -4, sin( ofGetElapsedTimef() ) * 3, 2 );
     ofSetColor( 183,241,195 );
-    ofDrawSphere( -4, sin( ofGetElapsedTimef() * 0.1 ) * 3, 5, 2 );
+    ofDrawSphere( -4, sin( ofGetElapsedTimef() * 0.3 ) * 3, 5, 2 );
     
     
     ofSetColor( 241,212,55 );
