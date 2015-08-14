@@ -23,7 +23,7 @@ public:
     void beginDepthPass();
     void endDepthPass();
     
-    void beginRenderPass( ofCamera& aCam );
+    void beginRenderPass( ofCamera* aCam );
     void endRenderPass();
     
     void setWidth( float aWidth );
@@ -35,6 +35,8 @@ public:
     void setBias( float aBias );
     // intensity of the shadows //
     void setIntensity( float aIntensity );
+    
+    ofShader shader;
     
 protected:
     
@@ -52,5 +54,5 @@ protected:
     
     ofFbo shadowFbo;
     ofCamera lightCam;
-    ofShader shader;
+    
 };

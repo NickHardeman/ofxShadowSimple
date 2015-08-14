@@ -185,23 +185,29 @@ void ofxShadowSimple::endDepthPass() {
 }
 
 //--------------------------------------------------------------
-void ofxShadowSimple::beginRenderPass( ofCamera &aCam ) {
+void ofxShadowSimple::beginRenderPass( ofCamera* aCam ) {
     
-    ofMatrix4x4 inverseCameraMatrix = ofMatrix4x4::getInverseOf( aCam.getModelViewMatrix() );
+    ofMatrix4x4 inverseCameraMatrix = ofMatrix4x4::getInverseOf( aCam->getModelViewMatrix() );
     ofMatrix4x4 shadowTransMatrix = inverseCameraMatrix * lightCam.getModelViewMatrix() * lightCam.getProjectionMatrix() * biasMatrix;
     
     shader.begin();
-    shader.setUniformTexture( "tShadowMap", shadowFbo.getDepthTexture(), 3 );
-    ofVec3f camPosInViewSpace = aCam.getPosition() * aCam.getModelViewMatrix();
+    shader.setUniformTexture( "tShadowMap", shadowFbo.getDepthTexture(), 10 );
+    ofVec3f camPosInViewSpace = aCam->getPosition() * aCam->getModelViewMatrix();
     shader.setUniformMatrix4f("u_ShadowTransMatrix", shadowTransMatrix );
-    ofVec3f lpos = lightCam.getPosition() * aCam.getModelViewMatrix();
+    ofVec3f lpos = lightCam.getPosition() * aCam->getModelViewMatrix();
     shader.setUniform3fv( "u_lightPosInWorldSpace", &lpos.getPtr()[0] );
-    ofVec3f lightInViewSpace = lightCam.getPosition() * aCam.getModelViewMatrix();
+//    ofVec3f lightInViewSpace = lightCam.getPosition() * aCam->getModelViewMatrix();
+    
+//    ofVec3f camPosInViewSpace = aCam->getPosition() * aCam->getModelViewMatrix();
+    shader.setUniform3fv( "u_CameraPosInViewSpace", &camPosInViewSpace.getPtr()[0] );
+    
+    ofVec3f lightInViewSpace = lightCam.getPosition() * aCam->getModelViewMatrix();
+    shader.setUniform3fv( "u_LightPosInViewSpace", &lightInViewSpace.getPtr()[0] );
     
     shader.setUniform1f( "u_width", getWidth() );
     shader.setUniform1f( "u_height", getHeight() );
-    shader.setUniform1f("u_bias", _depthBias );
-    shader.setUniform1f("u_shadowIntensity", _intensity );
+    shader.setUniform1f( "u_bias", _depthBias );
+    shader.setUniform1f( "u_shadowIntensity", _intensity );
 }
 
 //--------------------------------------------------------------
@@ -227,11 +233,17 @@ void ofxShadowSimple::allocateFbo() {
 //--------------------------------------------------------------
 void ofxShadowSimple::setWidth( float aWidth ) {
     _width = aWidth;
+    if( shadowFbo.getWidth() != getWidth() ) {
+        allocateFbo();
+    }
 }
 
 //--------------------------------------------------------------
 void ofxShadowSimple::setHeight( float aHeight ) {
     _height = aHeight;
+    if( shadowFbo.getHeight() != getHeight() ) {
+        allocateFbo();
+    }
 }
 
 //--------------------------------------------------------------
