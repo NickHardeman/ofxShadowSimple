@@ -20,11 +20,12 @@ public:
     void setLightPosition( ofVec3f aPos );
     void setLightLookAt( ofVec3f aPos, ofVec3f upVector = ofVec3f(0, 1, 0) );
     
-    void beginDepthPass();
-    void endDepthPass();
+    void beginDepthPass( bool aBWithCam = true );
+    void endDepthPass( bool aBWithCam = true );
     
     void beginRenderPass( ofCamera& aCam );
     void endRenderPass();
+    void setShaderData( ofShader* ashader, ofCamera& aCam, int atexLoc=2 );
     
     void setWidth( float aWidth );
     void setHeight( float aHeight );
@@ -36,6 +37,12 @@ public:
     // intensity of the shadows //
     void setIntensity( float aIntensity );
     
+    ofFbo& getFbo() { return shadowFbo; }
+    ofCamera& getLightCamera() { return lightCam; }
+    ofMatrix4x4 getShadowTransMatrix( ofCamera& acam );
+    ofShader& getShader() { return shader; }
+    ofParameterGroup& getParams() { return mParams; }
+    
 protected:
     
     string fragShaderStr, vertShaderStr;
@@ -44,11 +51,11 @@ protected:
     
     void allocateFbo();
     
-    bool bTriedLoad;
+    bool bTriedLoad = false;
     
-    float _width, _height;
-    float _depthBias;
-    float _intensity;
+    ofParameterGroup mParams;
+    ofParameter<float> _width, _height, _depthBias, _intensity;
+    ofParameter<float> _nearClip, _farClip;
     
     ofFbo shadowFbo;
     ofCamera lightCam;
